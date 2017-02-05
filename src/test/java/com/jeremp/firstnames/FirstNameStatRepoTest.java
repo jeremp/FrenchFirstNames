@@ -2,6 +2,8 @@ package com.jeremp.firstnames;
 
 import com.jeremp.firstnames.data.entities.FirstNameStat;
 import com.jeremp.firstnames.data.repo.FirstNameStatRepository;
+import com.jeremp.firstnames.services.DataLoaderService;
+import java.sql.SQLException;
 import java.util.Arrays;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +22,10 @@ import org.springframework.util.Assert;
 public class FirstNameStatRepoTest {
 
     @Autowired
-    FirstNameStatRepository fnStatRepository;
+    private FirstNameStatRepository fnStatRepository;
+    
+    @Autowired
+    private DataLoaderService dataLoaderService ;
 
     @Before
     public void init() {
@@ -35,7 +40,11 @@ public class FirstNameStatRepoTest {
 
     @Test
     public void testCount() {
-        Assert.isTrue(fnStatRepository.count()==3, "The DB should contains 3 entries");
+        Assert.isTrue(fnStatRepository.count()>3, "The DB should contains at least 3 entries");
     }
 
+    @Test
+    public void testByFirstName() throws SQLException{
+        dataLoaderService.findDistinctNames("JERE");
+    }
 }

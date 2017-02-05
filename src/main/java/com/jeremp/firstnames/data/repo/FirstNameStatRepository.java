@@ -2,6 +2,10 @@
 package com.jeremp.firstnames.data.repo;
 
 import com.jeremp.firstnames.data.entities.FirstNameStat;
+import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
@@ -11,5 +15,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FirstNameStatRepository extends CrudRepository<FirstNameStat, Long>{
+    
+    Page<FirstNameStat> findDistinctByFirstNameStartsWithIgnoreCase(String firstName, Pageable pageable);
     
 }
