@@ -34,15 +34,19 @@ public class DataController {
     @Autowired
     private DataLoaderService dataLoaderService ;
     
-    @GetMapping("")
-    public ResponseEntity<List<String>> guessFirstName(@RequestParam String firstName) throws SQLException{
-        if(StringUtils.isNotBlank(firstName)){
-            Page<FirstNameStat> page = statRepository.findDistinctByFirstNameStartsWithIgnoreCase(firstName, new PageRequest(0, 10, Sort.Direction.ASC, "firstName"));
-            List<String> data = dataLoaderService.findDistinctNames(firstName.toUpperCase(Locale.FRENCH));
+    @GetMapping("/autocomplete")
+    public ResponseEntity<List<String>> guessFirstName(@RequestParam String term) throws SQLException{
+        if(StringUtils.isNotBlank(term)){            
+            List<String> data = dataLoaderService.findDistinctNames(term.toUpperCase(Locale.FRENCH));
             return new ResponseEntity<>(data, HttpStatus.OK);
         }else{
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.BAD_REQUEST);
         }
+    }
+    
+    @GetMapping("")
+    public ResponseEntity<List<FirstNameStat>> getData(@RequestParam String firstName){
+        return new ResponseEntity<>(statRepository.findAllByFirstNameOrderByYear(firstName.toUpperCase(Locale.FRANCE)), HttpStatus.OK);
     }
     
 }

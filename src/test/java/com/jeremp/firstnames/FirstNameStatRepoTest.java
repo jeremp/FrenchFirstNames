@@ -5,6 +5,8 @@ import com.jeremp.firstnames.data.repo.FirstNameStatRepository;
 import com.jeremp.firstnames.services.DataLoaderService;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,6 +47,7 @@ public class FirstNameStatRepoTest {
 
     @Test
     public void testByFirstName() throws SQLException{
-        dataLoaderService.findDistinctNames("JERE");
+        List<String> distincNames = dataLoaderService.findDistinctNames("JERE");
+        Assert.isTrue(new HashSet<>(distincNames).size()==distincNames.size());
     }
 }

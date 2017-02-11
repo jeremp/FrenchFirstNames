@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Statictiques sur les prénoms</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+        <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+        <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+        <link rel="stylesheet" href="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
+        <script src="//cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+        <script>
+            var data ;
+            $(function() {
+                $("#txtFirstName").autocomplete({
+                    source: "/data/autocomplete",
+                    minLength: 2,
+                    select: function(event, ui) {
+                        //log( "Selected: " + ui.item.value + " aka " + ui.item.id );
+                        $.ajax({
+                                method: "GET",
+                                url: "/data?firstName=" + ui.item.value
+                            })
+                            .done(function(msg) {
+                                var theLabels = msg.map(function(a) {return a.year;});
+                                var theDataPoints = msg.map(function(a) {return a.nbTimesGiven;});
+                                if(!data){
+                                    data = {
+                                    // A labels array that can contain any sort of values
+                                    labels: theLabels,
+                                    // Our series array that contains series objects or in this case series data arrays
+                                    series: [
+                                      theDataPoints
+                                    ]
+                                  };
+
+                                  // Create a new line chart object where as first parameter we pass in a selector
+                                  // that is resolving to our chart container element. The Second parameter
+                                  // is the actual data object.
+                                
+                                }else{
+                                    data.series.push(theDataPoints);
+                                }
+                                new Chartist.Line('.ct-chart', data);
+                            });
+                    }
+                });
+            });
+                  
+                  
+        </script>
+    </head>
+    <body>
+        <div>indiquer un prenom : <input type="text" name="firstName" id="txtFirstName" /></div>        
+        
+        <div class="ct-chart ct-perfect-fourth"></div>
+
+        
+    </body>
+</html>

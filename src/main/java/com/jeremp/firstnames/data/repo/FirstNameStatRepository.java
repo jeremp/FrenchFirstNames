@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface FirstNameStatRepository extends CrudRepository<FirstNameStat, Long>{
-    
-    Page<FirstNameStat> findDistinctByFirstNameStartsWithIgnoreCase(String firstName, Pageable pageable);
-    
+        
+    List<FirstNameStat> findAllByFirstNameOrderByYear(String firstName);
 }
